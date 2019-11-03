@@ -19,7 +19,6 @@ import xyz.chunkstories.api.util.configuration.Configuration
 import xyz.chunkstories.client.glfw.GLFWWindow
 import xyz.chunkstories.client.ingame.IngameClientImplementation
 import xyz.chunkstories.content.GameContentStore
-import xyz.chunkstories.graphics.GraphicsBackendsEnum
 import xyz.chunkstories.graphics.GraphicsEngineImplementation
 import xyz.chunkstories.gui.ClientGui
 import xyz.chunkstories.gui.layer.LoginUI
@@ -27,7 +26,6 @@ import xyz.chunkstories.input.lwjgl3.Lwjgl3ClientInputsManager
 import xyz.chunkstories.sound.ALSoundManager
 import xyz.chunkstories.task.WorkerThreadPool
 import xyz.chunkstories.util.LogbackSetupHelper
-import xyz.chunkstories.util.VersionInfo
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
@@ -151,60 +149,10 @@ class ClientImplementation internal constructor(val arguments: Map<String, Strin
     }
 
     override fun print(message: String) {
-        chatLogger.info(message+Math.random())
+        chatLogger.info(message + Math.random())
     }
 
     override fun logger(): Logger {
         return this.logger
-    }
-
-    companion object {
-
-        @JvmStatic
-        fun main(launchArguments: Array<String>) {
-            val argumentsMap = mutableMapOf<String, String>()
-            for (launchArgument in launchArguments) {
-                if(launchArgument.startsWith("--")) {
-                    val stripped = launchArgument.removePrefix("--")
-
-                    if(launchArgument.contains('=')) {
-                        val firstIndex = stripped.indexOf('=')
-                        val argName = stripped.substring(0, firstIndex)
-                        val argValue = stripped.substring(firstIndex + 1, stripped.length).removeSurrounding("\"")
-
-                        argumentsMap[argName] = argValue
-                    } else {
-                        argumentsMap[stripped] = "true"
-                    }
-                } else {
-                    println("Unrecognized launch argument: $launchArgument")
-                }
-            }
-
-            if(argumentsMap["help"] != null) {
-                printHelp()
-                System.exit(0)
-            }
-
-            ClientImplementation(argumentsMap)
-        }
-
-        private fun printHelp() {
-            println("""
-                Chunk Stories Client version: ${VersionInfo.versionJson.verboseVersion}
-
-                Available commandline options:
-                --core=... Specifies the folder/file to use as the base content
-                --mods=... Specifies some mods to load
-                --backend=[${GraphicsBackendsEnum.values()}] Forces a specific backend to be used.
-
-                Backend-specific options:
-
-                Vulkan-specific options:
-                --enableValidation Enables the validation layers
-
-                OpenGL-specific options:
-            """.trimIndent())
-        }
     }
 }

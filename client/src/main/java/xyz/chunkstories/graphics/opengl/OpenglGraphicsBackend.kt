@@ -173,7 +173,7 @@ class OpenglGraphicsBackend(graphicsEngine: GraphicsEngineImplementation, window
         val implemClass: Class<out OpenglDispatchingSystem<out Representation>> = when(dispatchingSystemRegistration.clazz) {
             ModelsRenderer::class.java -> OpenglModelsDispatcher::class
             ChunksRenderer::class.java -> OpenglChunkRepresentationsDispatcher::class
-            else -> throw Exception("Unimplemented system on this backend: ${dispatchingSystemRegistration.clazz}")
+            else -> throw NotImplementedError("Unimplemented system on this backend: ${dispatchingSystemRegistration.clazz}")
         }.java
 
         val existing = list.find { implemClass.isAssignableFrom(it::class.java) }
@@ -183,7 +183,7 @@ class OpenglGraphicsBackend(graphicsEngine: GraphicsEngineImplementation, window
         val new: OpenglDispatchingSystem<out Representation> = when(dispatchingSystemRegistration.clazz) {
             ModelsRenderer::class.java -> OpenglModelsDispatcher(this)
             ChunksRenderer::class.java -> OpenglChunkRepresentationsDispatcher(this)
-            else -> throw Exception("Unimplemented system on this backend: ${dispatchingSystemRegistration.clazz}")
+            else -> throw NotImplementedError("Unimplemented system on this backend: ${dispatchingSystemRegistration.clazz}")
         }
 
         list.add(new)

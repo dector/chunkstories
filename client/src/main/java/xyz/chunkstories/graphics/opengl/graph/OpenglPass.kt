@@ -16,6 +16,7 @@ import xyz.chunkstories.graphics.opengl.OpenglGraphicsBackend
 import xyz.chunkstories.graphics.opengl.systems.OpenglDispatchingSystem
 import xyz.chunkstories.graphics.opengl.systems.OpenglDrawingSystem
 import xyz.chunkstories.graphics.vulkan.systems.world.ViewportSize
+import xyz.chunkstories.gui.logger
 
 class OpenglPass(val backend: OpenglGraphicsBackend, val renderTask: OpenglRenderTask, val declaration: PassDeclaration) : Cleanable {
     val drawingSystems: List<OpenglDrawingSystem>
@@ -60,11 +61,16 @@ class OpenglPass(val backend: OpenglGraphicsBackend, val renderTask: OpenglRende
                     val drawingSystem = backend.createDrawingSystem(this, registeredSystem as RegisteredGraphicSystem<DrawingSystem>)
                     drawingSystems.add(drawingSystem)
                 } else if (DispatchingSystem::class.java.isAssignableFrom(registeredSystem.clazz)) {
-                    val dispatchingSystem = backend.getOrCreateDispatchingSystem(renderTask.renderGraph.dispatchingSystems, registeredSystem as RegisteredGraphicSystem<DispatchingSystem>)
-                    val drawer = dispatchingSystem.createDrawerForPass(this, registeredSystem.dslCode as OpenglDispatchingSystem.Drawer<*>.() -> Unit)
+                    try {
+                        val dispatchingSystem = backend.getOrCreateDispatchingSystem(renderTask.renderGraph.dispatchingSystems, registeredSystem as RegisteredGraphicSystem<DispatchingSystem>)
+                        val drawer = dispatchingSystem.createDrawerForPass(this, registeredSystem.dslCode as OpenglDispatchingSystem.Drawer<*>.() -> Unit)
 
-                    dispatchingSystem.drawersInstances.add(drawer)
-                    dispatchingDrawers.add(drawer)
+                        dispatchingSystem.drawersInstances.add(drawer)
+                        dispatchingDrawers.add(drawer)
+                    } catch (e: NotImplementedError) {
+                        logger.error("System not implemented in OpenGL backend.", e)
+                        // TODO ignore for now
+                    }
                 } else {
                     throw Exception("What is this :$registeredSystem ?")
                 }
