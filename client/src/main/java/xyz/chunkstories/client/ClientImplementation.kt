@@ -29,6 +29,7 @@ import xyz.chunkstories.util.LogbackSetupHelper
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.system.exitProcess
 
 /** Client implementation entry point, is the root of the systems and holds state through them  */
 class ClientImplementation internal constructor(val arguments: Map<String, String>) : Client, GameContext {
@@ -110,11 +111,13 @@ class ClientImplementation internal constructor(val arguments: Map<String, Strin
 
         // Initlializes windows screen to main menu ( and ask for login )
         gui.topLayer = LoginUI(gui, null)
+    }
 
+    fun launch() {
         mainLoop()
         cleanup()
 
-        System.exit(0)
+        exitProcess(0)
     }
 
     private fun mainLoop() {

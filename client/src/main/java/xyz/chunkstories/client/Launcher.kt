@@ -30,6 +30,7 @@ fun main(launchArguments: Array<String>) {
     }
 
     ClientImplementation(argumentsMap)
+        .launch()
 }
 
 private fun printHelp() {
