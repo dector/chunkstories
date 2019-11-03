@@ -38,7 +38,7 @@ dependencies {
 }
 
 application {
-    mainClassName = "xyz.chunkstories.client.ClientImplementation"
+    mainClassName = "xyz.chunkstories.client.LauncherKt"
 }
 
 description = "Multiplatform PC Client using LWJGL3"
