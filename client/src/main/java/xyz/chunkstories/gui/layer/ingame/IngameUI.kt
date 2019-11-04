@@ -106,8 +106,10 @@ class IngameUI(window: Gui, private val client: IngameClientImplementation) : La
         val playerEntity = player.controlledEntity
         // Block inputs if chatting
         when {
-            input.name == "chat" -> {
-                gui.topLayer = chatManager.ChatUI(gui, this)
+            input.name == "chat" || input.name == "commandInChat" -> {
+                val text = if (input.name == "commandInChat") "/" else ""
+
+                gui.topLayer = chatManager.ChatUI(gui, this, text)
                 focus(false)
                 guiHidden = false
                 return true

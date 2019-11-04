@@ -62,7 +62,7 @@ class ChatManager(private val ingameClient: IngameClient, private val ingameGuiU
         }
     }
 
-    inner class ChatUI(gui: Gui, parent: Layer) : Layer(gui, parent) {
+    inner class ChatUI(gui: Gui, parent: Layer, text: String = "") : Layer(gui, parent) {
         internal var inputBox: InputText
 
         internal var delay: Long = 0
@@ -71,6 +71,7 @@ class ChatManager(private val ingameClient: IngameClient, private val ingameGuiU
 
             // Add the inputBox
             this.inputBox = InputText(this, 0, 0, 500)
+                .also { it.text = text }
             this.elements.add(inputBox)
             this.focusedElement = inputBox
 
