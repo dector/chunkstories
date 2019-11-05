@@ -18,6 +18,7 @@ class SpawnCommand(serverConsole: Server) : ServerCommandBasic(serverConsole) {
 
     init {
         server.pluginManager.registerCommand("spawn", this)
+        server.pluginManager.registerCommand("setspawn", this)
     }
 
     override fun handleCommand(emitter: CommandEmitter, command: Command, arguments: Array<String>): Boolean {
